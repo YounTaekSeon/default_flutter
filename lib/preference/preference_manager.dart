@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferenceManager {
 
   static final PreferenceManager _instance = PreferenceManager._internal();
+
   factory PreferenceManager() => _instance;
 
   SharedPreferences? prefs;
@@ -14,46 +15,29 @@ class PreferenceManager {
     prefs = await SharedPreferences.getInstance();
   }
 
-  void saveString(String key, String value) {
-    prefs?.setString(key, value);
+  Future<bool>? saveString(String key, String value) {
+    return prefs?.setString(key, value);
   }
 
-  Future<bool> clearPref(){
-    if(prefs != null) {
+  Future<bool> clearAllPref() {
+    if (prefs != null) {
       return prefs!.clear();
-    } else{
+    } else {
       return Future(() => false);
     }
   }
 
-  // void removeUser() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   await preferences.clear();
-  // }
+  Future<bool> removePref(String key) {
+    if (prefs != null) {
+      return prefs!.remove(key);
+    } else {
+      return Future(() => false);
+    }
+  }
 
   String? loadString(String key) {
-
     String? value = prefs?.getString(key);
 
     return value;
   }
-
-// Future<String?> loadString(String key) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String? value = prefs.getString(key);
-//
-//   return value;
-// }
-//
-// void saveBool(String key, bool value) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   prefs.setBool(key, value);
-// }
-//
-// Future<bool?> loadBool(String key) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   bool? value = prefs.getBool(key);
-//
-//   return value;
-// }
 }
