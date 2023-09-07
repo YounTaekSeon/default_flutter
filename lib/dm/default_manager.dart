@@ -55,7 +55,7 @@ class DefaultManager {
       _systemEventListener?.onEvent(SystemEvent.SUCCESSFUL);
       completer.complete(value.result);
     }).catchError((e, s) {
-      AppUtil.printErrorLog("junseo error: ${e} \n ${s}");
+      AppUtil.printErrorLog("error: ${e} \n ${s}");
       _systemEventListener?.onEvent(SystemEvent.FAILED_REQUEST);
     });
 
@@ -77,7 +77,7 @@ class DefaultManager {
       _systemEventListener?.onEvent(SystemEvent.SUCCESSFUL);
       completer.complete(value.getResult());
     }).catchError((e, s) {
-      AppUtil.printErrorLog("junseo error: ${e} \n ${s}");
+      AppUtil.printErrorLog("error: ${e} \n ${s}");
       _systemEventListener?.onEvent(SystemEvent.FAILED_REQUEST);
     });
 
