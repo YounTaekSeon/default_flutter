@@ -12,10 +12,79 @@ class LayoutsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: const Drawer(child: _ListView()),
       appBar: AppBar(
         title: const Text("레이아웃"),
       ),
       body: _Body(),
+    );
+  }
+}
+
+class _ListView extends StatelessWidget {
+  const _ListView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                child: Text("Drawer"),
+              ),
+              InkWell(
+                splashColor: Colors.black,
+                onTap: () {},
+                child: const Padding(
+                    padding:
+                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+                    child: ListTile(title: AutoSizeText(("First Button")))),
+              ),
+              InkWell(
+                splashColor: Colors.black,
+                onTap: () {},
+                child: const Padding(
+                    padding:
+                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+                    child: ListTile(title: AutoSizeText(("Second Button")))),
+              ),
+              InkWell(
+                splashColor: Colors.black,
+                onTap: () {},
+                child: const Padding(
+                    padding:
+                    EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+                    child: ListTile(title: AutoSizeText(("Third Button")))),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: FractionalOffset.bottomCenter,
+          // This container holds all the children that will be aligned
+          // on the bottom and should not scroll with the above ListView
+          child: Column(
+            children: [
+              const Divider(),
+              InkWell(
+                splashColor: Colors.black,
+                onTap: () {},
+                child: const ListTile(
+                    leading: Icon(Icons.settings), title: Text('Settings')),
+              ),
+              InkWell(
+                splashColor: Colors.black,
+                onTap: () {},
+                child: const ListTile(
+                    leading: Icon(Icons.help),
+                    title: AutoSizeText('Help and Feedback', maxLines: 1)),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }
@@ -101,8 +170,49 @@ class _Body extends DefaultBody {
               );
             },
           ),
+          TextButton(onPressed: (){_showActionSheet(context);}, child: Text("Cupertino Button")),
+          TextButton(onPressed: (){_showModalSheet(context);}, child: Text("Modal Button")),
         ],
       ),
     );
+  }
+
+  void _showActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) =>
+          CupertinoActionSheet(
+            title: const Text('Title'),
+            message: const Text('Message'),
+            actions: <CupertinoActionSheetAction>[
+              CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Default Action'),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Action'),
+              ),
+              CupertinoActionSheetAction(
+                isDestructiveAction: true,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Destructive Action'),
+              ),
+            ],
+          ),
+    );
+  }
+
+  void _showModalSheet(BuildContext context) {
+    DialogHelper.showCommonMessageDialog(buildContext,msg: "Dialog", showCancel: false, onConfirmClicked: () {
+      SystemNavigator.pop();
+    });
   }
 }
