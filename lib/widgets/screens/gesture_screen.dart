@@ -40,13 +40,10 @@ class _Body extends DefaultBody {
   Widget buildBody(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(height: double.infinity,),
-        GestureIcon(),
         Container(
-          height: 50,
-          width: 50,
-          color: Colors.green,
+          height: double.infinity,
         ),
+        GestureIcon(),
       ],
     );
   }
@@ -64,44 +61,35 @@ class _GestureIconState extends State<GestureIcon> {
   double _leftValue = 0;
   double _topValue = 0;
 
-  int _time = 3000;
+  // int _time = 1000;
 
-  // double _baseScaleFactor = 120;
-  // double _scaleFactor = 120;
+  double _baseScaleFactor = 120;
+  double _scaleFactor = 120;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPositioned(
-      duration: Duration(milliseconds: _time),
+
+    // return AnimatedPositioned(
+    return Positioned(
+      // duration: Duration(milliseconds: _time),
       left: _leftValue,
       top: _topValue,
       child: GestureDetector(
         onTap: () => setState(() {
-          _topValue = 0;
-          _leftValue = 0;
           _tapIcon();
-          AppUtil.printHighlightLog("Tap $_topValue $_leftValue");
         }),
         onLongPress: () => setState(() {
-          _longPressIcon();
+          _deepTapIcon();
         }),
         onPanStart: (details) {
           setState(() {
-            _topValue = details.localPosition.dy;
-            _leftValue = details.localPosition.dx;
+            _dragStartIcon(details);
+              _baseScaleFactor = _scaleFactor;
           });
         },
         onPanUpdate: (details) {
           setState(() {
-            _topValue += details.delta.dy;
-            _leftValue += details.delta.dx;
-            _time = 500;
-          });
-        },
-        onPanEnd: (details) {
-          setState(() {
-            _topValue = 0;
-            _leftValue = 0;
+            _dragIcon(details);
           });
         },
         // onScaleStart: (details) {
@@ -112,9 +100,9 @@ class _GestureIconState extends State<GestureIcon> {
         //     _scaleFactor = _baseScaleFactor * details.scale;
         //   });
         // },
-        child: Icon(
-          Icons.check_circle_outline,
-          size: 100,
+        child: Container(
+          height: 200,
+          width: 200,
           color: _iConColor,
         ),
       ),
@@ -126,8 +114,19 @@ class _GestureIconState extends State<GestureIcon> {
     showMessage("Tap");
   }
 
-  void _longPressIcon() {
-    ("Long Press");
+  void _deepTapIcon() {
+    showMessage("LongTap");
+  }
+
+  void _dragIcon(DragUpdateDetails details) {
+    _leftValue += details.delta.dx;
+    _topValue += details.delta.dy;
+    // _time = 500;
+  }
+
+  void _dragStartIcon(DragStartDetails details) {
+    _leftValue = details.localPosition.dx;
+    _topValue = details.localPosition.dy;
   }
 
   void _changeColor() {
